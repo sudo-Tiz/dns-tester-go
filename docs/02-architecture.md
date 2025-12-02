@@ -211,24 +211,6 @@ graph TB
 
 ## ⚡ Performance
 
-### dns-tester-go (Estimated)
-
-| Metric | Value |
-|--------|-------|
-| API throughput | ~1000 req/s/instance |
-| DNS queries | ~100 qps/worker |
-| Task latency | 10-200ms (protocol-dependent) |
-| API latency | < 5ms |
-
-### vs DNS-Tester (Python)
-
-| Metric | Python | Go |
-|--------|--------|-----|
-| Throughput | _TBD_ | _TBD_ |
-| Latency (avg) | _TBD_ | _TBD_ |
-| Memory usage | _TBD_ | _TBD_ |
-| CPU usage | _TBD_ | _TBD_ |
-
 > 🔬 **Benchmarks in progress** - Comprehensive performance comparison coming soon.
 
 ---

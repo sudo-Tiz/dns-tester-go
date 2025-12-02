@@ -1,0 +1,29 @@
+name: Prek
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  prek:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+          cache: true
+      - name: Generate Swagger docs (for validation)
+        run: make swagger
+      - name: Install prek
+        uses: j178/setup-prek@v1
+      - name: Cache prek
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/prek
+          key: prek-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Run prek
+        run: prek run --all-files --show-diff-on-failure

@@ -3,11 +3,17 @@
 ## Development Setup
 
 ```bash
-git clone https://github.com/sudo-Tiz/dns-tester-go.git
+git clone https://github.com/sudo-tiz/dns-tester-go.git
 cd dns-tester-go
 
 # Install dependencies
 go mod download
+
+# Install prek hooks (REQUIRED)
+make install-prek
+
+# Alternative: use pre-commit if you prefer (fully compatible)
+# pip install pre-commit && pre-commit install
 
 # Run tests
 make test
@@ -15,6 +21,15 @@ make test
 # Build
 make build
 ```
+
+**Prek hooks will automatically:**
+- Format code (gofmt, goimports)
+- Run linters (golangci-lint)
+- Validate YAML files
+- Check conventional commit messages
+- Generate Swagger docs
+
+> **Note:** We use [prek](https://prek.j178.dev/) (faster Rust alternative to pre-commit), but the standard `pre-commit` tool also works with our `.pre-commit-config.yaml`.
 
 ## Project Structure
 
@@ -34,19 +49,20 @@ dns-tester-go/
 
 ## Code Style
 
-**Go:**
-- Use `gofmt` and `goimports`
-- Follow [Effective Go](https://go.dev/doc/effective_go)
+**Automated by prek hooks:**
+- Go formatting (`gofmt`, `goimports`)
+- Linting (`golangci-lint`)
+- YAML validation
 - Max line length: 120 chars
 
-**Commit messages:**
+**Commit messages (enforced by prek):**
 ```
 type(scope): subject
 
 body (optional)
 ```
 
-**Types:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+**Types:** `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`, `perf`
 
 **Example:**
 ```
@@ -54,6 +70,15 @@ feat(api): add DoQ protocol support
 
 Implements DNS-over-QUIC using AdGuard dnsproxy.
 Closes #123
+```
+
+**Manual checks:**
+```bash
+# Run all prek hooks manually
+make prek
+
+# Run specific linters
+make lint
 ```
 
 ## Testing

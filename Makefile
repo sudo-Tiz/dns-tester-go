@@ -1,7 +1,7 @@
 .PHONY: build build-all clean deps docker-build-all docker-build-dev \
     docker-build-query docker-build-server docker-build-test docker-clean \
     docker-dev docker-down docker-logs docker-prod docker-scale-workers \
-    install install-pre-commit lint pre-commit swagger test test-e2e \
+    install install-prek lint prek swagger test test-e2e \
     test-e2e-docker test-verbose
 
 
@@ -19,7 +19,7 @@ help:
 	@echo "  test-verbose   Run tests with verbose output"
 	@echo "  test-e2e       Run E2E tests (requires Docker stack)"
 	@echo "  lint           Run Go linters (vet, fmt, golangci-lint)"
-	@echo "  pre-commit     Run all pre-commit hooks"
+	@echo "  prek           Run all prek hooks"
 	@echo ""
 	@echo "=== Docker ==="
 	@echo "  docker-build-all     Build all Docker images"
@@ -33,7 +33,7 @@ help:
 	@echo "=== Other ==="
 	@echo "  deps                 Download and tidy dependencies"
 	@echo "  swagger              Generate Swagger docs (run after API changes)"
-	@echo "  install-pre-commit   Install pre-commit hooks"
+	@echo "  install-prek         Install prek hooks"
 	@echo "  clean                Clean build artifacts"
 
 
@@ -91,12 +91,12 @@ test-e2e-docker:
 	@docker compose --profile prod down
 	@echo "✅ E2E tests completed"
 
-# Install pre-commit hooks
-install-pre-commit:
-	@which pre-commit > /dev/null || pip install pre-commit
-	@pre-commit install
-	@pre-commit install --hook-type commit-msg
-	@echo "✅ Pre-commit hooks installed in .git/hooks/"
+# Install prek hooks
+install-prek:
+	@which prek > /dev/null || cargo install --git https://github.com/j178/prek
+	@prek install
+	@prek install --hook-type commit-msg
+	@echo "✅ Prek hooks installed in .git/hooks/"
 
 # Run Go linters (format, vet, and check)
 lint:
@@ -115,9 +115,9 @@ lint:
 	fi
 	@echo "✅ All linters passed"
 
-# Run all pre-commit checks (Go, YAML, commits, etc.)
-pre-commit:
-	@pre-commit run --all-files
+# Run all prek checks (Go, YAML, commits, etc.)
+prek:
+	@prek run --all-files
 
 # ============================================================================
 # Docker Build Targets
