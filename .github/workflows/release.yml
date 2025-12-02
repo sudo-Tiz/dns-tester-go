@@ -134,7 +134,7 @@ jobs:
         if: steps.get_version.outputs.has_version == 'true'
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
-          REPO="ghcr.io/${{ github.repository }}"
+          REPO=$(echo "ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]') # Docker doesn't sip cup of Tiz
 
           # Build and push server image
           docker buildx build \
