@@ -20,7 +20,7 @@ import (
 	"github.com/sudo-tiz/dns-tester-go/internal/models"
 	"github.com/sudo-tiz/dns-tester-go/internal/normalize"
 	"github.com/sudo-tiz/dns-tester-go/internal/tasks"
-	httpSwagger "github.com/swaggo/http-swagger"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 
 	_ "github.com/sudo-tiz/dns-tester-go/internal/api/docs" // swagger docs
 )
