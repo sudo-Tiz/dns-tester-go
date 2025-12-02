@@ -60,12 +60,15 @@ jobs:
       - name: Get version
         id: get_version
         run: |
-          if [ -f VERSION ]; then
-            VERSION=$(cat VERSION)
+          # Get the latest git tag created by semantic-release
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "")
+          if [ -n "$VERSION" ]; then
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "has_version=true" >> $GITHUB_OUTPUT
+            echo "Found version: $VERSION"
           else
             echo "has_version=false" >> $GITHUB_OUTPUT
+            echo "No version tag found, skipping build"
           fi
       - name: Generate Swagger docs
         if: steps.get_version.outputs.has_version == 'true'
