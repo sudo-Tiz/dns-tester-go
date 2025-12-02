@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
 )
 
 // Client wraps http.Client for API requests.

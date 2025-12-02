@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/cli"
+	"github.com/sudo-tiz/dns-tester-go/internal/cli"
 )
 
 func main() {

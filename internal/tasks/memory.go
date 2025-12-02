@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/config"
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
-	"github.com/sudo-Tiz/dns-tester-go/internal/resolver"
+	"github.com/sudo-tiz/dns-tester-go/internal/config"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/resolver"
 )
 
 type memoryClient struct {

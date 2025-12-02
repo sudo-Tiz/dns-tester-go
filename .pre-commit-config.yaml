@@ -39,6 +39,7 @@ repos:
     rev: v0.19.0
     hooks:
       - id: yamlfmt
+        exclude: 'internal/api/docs/swagger\.(yaml|json)$|docs/openapi\.yaml$'
   # Commit message linting
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.3.0

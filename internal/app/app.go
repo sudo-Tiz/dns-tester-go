@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/api"
-	"github.com/sudo-Tiz/dns-tester-go/internal/config"
-	"github.com/sudo-Tiz/dns-tester-go/internal/tasks"
+	"github.com/sudo-tiz/dns-tester-go/internal/api"
+	"github.com/sudo-tiz/dns-tester-go/internal/config"
+	"github.com/sudo-tiz/dns-tester-go/internal/tasks"
 )
 
 // APIApp wraps server and tasks client for lifecycle management.

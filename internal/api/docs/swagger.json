@@ -6,15 +6,15 @@
     "swagger": "2.0",
     "info": {
         "description": "Asynchronous DNS testing with support for Do53, DoT, DoH, DoQ protocols\nThis API allows you to submit DNS queries and retrieve results asynchronously",
-        "title": "dns-tester-go API",
+        "title": "DNS-Tester-GO API",
         "contact": {
-            "name": "dns-tester-go",
-            "url": "https://github.com/sudo-Tiz/dns-tester-go",
+            "name": "DNS-Tester-GO",
+            "url": "https://github.com/sudo-Tiz/DNS-Tester-GO",
             "email": "contact@example.com"
         },
         "license": {
             "name": "MIT",
-            "url": "https://github.com/sudo-Tiz/dns-tester-go/blob/main/LICENSE"
+            "url": "https://github.com/sudo-Tiz/DNS-Tester-GO/blob/main/LICENSE"
         },
         "version": "1.0.0"
     },
@@ -41,7 +41,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupRequest"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupRequest"
                         }
                     }
                 ],
@@ -49,25 +49,25 @@
                     "200": {
                         "description": "Task accepted and enqueued",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid request or missing parameters",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Rate limit exceeded",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "No workers available",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     }
                 }
@@ -87,7 +87,7 @@
                     "200": {
                         "description": "Service is healthy or degraded",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse"
                         }
                     }
                 }
@@ -133,7 +133,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ReverseLookupRequest"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ReverseLookupRequest"
                         }
                     }
                 ],
@@ -141,25 +141,25 @@
                     "200": {
                         "description": "Task accepted and enqueued",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid IP address or missing parameters",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     },
                     "429": {
                         "description": "Rate limit exceeded",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     },
                     "503": {
                         "description": "No workers available",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     }
                 }
@@ -179,7 +179,7 @@
                     "200": {
                         "description": "Service is healthy or degraded",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse"
                         }
                     }
                 }
@@ -208,19 +208,19 @@
                     "200": {
                         "description": "Task found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskStatusResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskStatusResponse"
                         }
                     },
                     "404": {
                         "description": "Task not found",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse"
                         }
                     }
                 }
@@ -228,7 +228,7 @@
         }
     },
     "definitions": {
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.DNSAnswer": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.DNSAnswer": {
             "description": "DNS resource record with name, type, TTL, and value",
             "type": "object",
             "properties": {
@@ -254,7 +254,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupRequest": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupRequest": {
             "description": "DNS lookup request with domain, query type, and optional DNS servers",
             "type": "object",
             "required": [
@@ -266,7 +266,7 @@
                     "description": "DNS servers to query (optional, uses config if empty)",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer"
+                        "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer"
                     }
                 },
                 "domain": {
@@ -286,7 +286,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResult": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResult": {
             "description": "Result from a single DNS server query",
             "type": "object",
             "properties": {
@@ -294,7 +294,7 @@
                     "description": "DNS answers",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSAnswer"
+                        "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSAnswer"
                     }
                 },
                 "command_status": {
@@ -345,7 +345,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResults": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResults": {
             "description": "Aggregated DNS lookup results from all queried servers",
             "type": "object",
             "properties": {
@@ -353,7 +353,7 @@
                     "description": "Results per DNS server (keyed by target)",
                     "type": "object",
                     "additionalProperties": {
-                        "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResult"
+                        "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResult"
                     }
                 },
                 "duration": {
@@ -363,7 +363,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer": {
             "description": "DNS server configuration with protocol://host:port format",
             "type": "object",
             "properties": {
@@ -386,7 +386,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse": {
             "description": "Error response returned for failed requests",
             "type": "object",
             "properties": {
@@ -397,7 +397,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse": {
             "description": "Health check response",
             "type": "object",
             "properties": {
@@ -413,7 +413,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.ReverseLookupRequest": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.ReverseLookupRequest": {
             "description": "Reverse DNS lookup request for an IP address",
             "type": "object",
             "required": [
@@ -424,7 +424,7 @@
                     "description": "DNS servers to query (optional)",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer"
+                        "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer"
                     }
                 },
                 "reverse_ip": {
@@ -439,7 +439,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse": {
             "description": "Task submission response with unique task ID",
             "type": "object",
             "properties": {
@@ -455,7 +455,7 @@
                 }
             }
         },
-        "github_com_sudo-Tiz_dns-tester-go_internal_models.TaskStatusResponse": {
+        "github_com_sudo-tiz_dns-tester-go_internal_models.TaskStatusResponse": {
             "description": "Task status response with result when completed",
             "type": "object",
             "properties": {
@@ -481,7 +481,7 @@
                     "description": "Query results (populated when status is SUCCESS)",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResults"
+                            "$ref": "#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResults"
                         }
                     ]
                 },

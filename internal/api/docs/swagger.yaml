@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  github_com_sudo-Tiz_dns-tester-go_internal_models.DNSAnswer:
+  github_com_sudo-tiz_dns-tester-go_internal_models.DNSAnswer:
     description: DNS resource record with name, type, TTL, and value
     properties:
       name:
@@ -20,13 +20,13 @@ definitions:
         example: 93.184.216.34
         type: string
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupRequest:
+  github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupRequest:
     description: DNS lookup request with domain, query type, and optional DNS servers
     properties:
       dns_servers:
         description: DNS servers to query (optional, uses config if empty)
         items:
-          $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer'
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer'
         type: array
       domain:
         description: Domain name to query
@@ -41,16 +41,16 @@ definitions:
         example: false
         type: boolean
     required:
-      - domain
-      - qtype
+    - domain
+    - qtype
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResult:
+  github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResult:
     description: Result from a single DNS server query
     properties:
       answers:
         description: DNS answers
         items:
-          $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSAnswer'
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSAnswer'
         type: array
       command_status:
         description: Command execution status
@@ -79,8 +79,8 @@ definitions:
       tags:
         description: Server tags
         example:
-          - GOOGLE
-          - PRIMARY
+        - GOOGLE
+        - PRIMARY
         items:
           type: string
         type: array
@@ -89,12 +89,12 @@ definitions:
         example: 23.45
         type: number
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResults:
+  github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResults:
     description: Aggregated DNS lookup results from all queried servers
     properties:
       details:
         additionalProperties:
-          $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResult'
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResult'
         description: Results per DNS server (keyed by target)
         type: object
       duration:
@@ -102,15 +102,15 @@ definitions:
         example: 0.125
         type: number
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer:
+  github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer:
     description: DNS server configuration with protocol://host:port format
     properties:
       tags:
         description: Optional tags for identification
         example:
-          - GOOGLE
-          - PRIMARY
-          - PUBLIC
+        - GOOGLE
+        - PRIMARY
+        - PUBLIC
         items:
           type: string
         type: array
@@ -119,7 +119,7 @@ definitions:
         example: udp://8.8.8.8:53
         type: string
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse:
+  github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse:
     description: Error response returned for failed requests
     properties:
       error:
@@ -127,7 +127,7 @@ definitions:
         example: rate limit exceeded
         type: string
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse:
+  github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse:
     description: Health check response
     properties:
       status:
@@ -139,13 +139,13 @@ definitions:
         example: no active workers detected
         type: string
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.ReverseLookupRequest:
+  github_com_sudo-tiz_dns-tester-go_internal_models.ReverseLookupRequest:
     description: Reverse DNS lookup request for an IP address
     properties:
       dns_servers:
         description: DNS servers to query (optional)
         items:
-          $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSServer'
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSServer'
         type: array
       reverse_ip:
         description: IP address to reverse lookup
@@ -156,9 +156,9 @@ definitions:
         example: false
         type: boolean
     required:
-      - reverse_ip
+    - reverse_ip
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse:
+  github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse:
     description: Task submission response with unique task ID
     properties:
       message:
@@ -170,7 +170,7 @@ definitions:
         example: abc123def456789
         type: string
     type: object
-  github_com_sudo-Tiz_dns-tester-go_internal_models.TaskStatusResponse:
+  github_com_sudo-tiz_dns-tester-go_internal_models.TaskStatusResponse:
     description: Task status response with result when completed
     properties:
       completed_at:
@@ -189,7 +189,7 @@ definitions:
         type: string
       task_result:
         allOf:
-          - $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupResults'
+        - $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupResults'
         description: Query results (populated when status is SUCCESS)
       task_status:
         description: Task status (PENDING, ACTIVE, SUCCESS, FAILURE)
@@ -200,69 +200,70 @@ host: localhost:5000
 info:
   contact:
     email: contact@example.com
-    name: dns-tester-go
-    url: https://github.com/sudo-Tiz/dns-tester-go
+    name: DNS-Tester-GO
+    url: https://github.com/sudo-Tiz/DNS-Tester-GO
   description: |-
     Asynchronous DNS testing with support for Do53, DoT, DoH, DoQ protocols
     This API allows you to submit DNS queries and retrieve results asynchronously
   license:
     name: MIT
-    url: https://github.com/sudo-Tiz/dns-tester-go/blob/main/LICENSE
-  title: dns-tester-go API
+    url: https://github.com/sudo-Tiz/DNS-Tester-GO/blob/main/LICENSE
+  title: DNS-Tester-GO API
   version: 1.0.0
 paths:
   /dns-lookup:
     post:
       consumes:
-        - application/json
-      description: Enqueue a DNS lookup for asynchronous processing. Returns a task ID that can be polled.
+      - application/json
+      description: Enqueue a DNS lookup for asynchronous processing. Returns a task
+        ID that can be polled.
       parameters:
-        - description: DNS lookup parameters
-          in: body
-          name: request
-          required: true
-          schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.DNSLookupRequest'
+      - description: DNS lookup parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.DNSLookupRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Task accepted and enqueued
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse'
         "400":
           description: Invalid request or missing parameters
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
         "429":
           description: Rate limit exceeded
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
         "503":
           description: No workers available
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
       summary: Submit DNS lookup task
       tags:
-        - DNS
+      - DNS
   /health:
     get:
       description: Check if the API service is running and workers are available
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Service is healthy or degraded
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse'
       summary: Health check
       tags:
-        - System
+      - System
   /metrics:
     get:
       description: Expose application metrics in Prometheus format
       produces:
-        - text/plain
+      - text/plain
       responses:
         "200":
           description: Prometheus metrics
@@ -270,89 +271,91 @@ paths:
             type: string
       summary: Prometheus metrics
       tags:
-        - System
+      - System
   /reverse-lookup:
     post:
       consumes:
-        - application/json
-      description: Enqueue a reverse DNS lookup for an IP address. Automatically converts IP to PTR format.
+      - application/json
+      description: Enqueue a reverse DNS lookup for an IP address. Automatically converts
+        IP to PTR format.
       parameters:
-        - description: Reverse lookup parameters
-          in: body
-          name: request
-          required: true
-          schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ReverseLookupRequest'
+      - description: Reverse lookup parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ReverseLookupRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Task accepted and enqueued
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskResponse'
         "400":
           description: Invalid IP address or missing parameters
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
         "429":
           description: Rate limit exceeded
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
         "503":
           description: No workers available
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
       summary: Submit reverse DNS lookup (PTR)
       tags:
-        - DNS
+      - DNS
   /status:
     get:
       description: Check if the API service is running and workers are available
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Service is healthy or degraded
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.HealthResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.HealthResponse'
       summary: Health check
       tags:
-        - System
+      - System
   /tasks/{taskID}:
     get:
-      description: Retrieve the status and result of a previously submitted DNS lookup task
+      description: Retrieve the status and result of a previously submitted DNS lookup
+        task
       parameters:
-        - description: Task ID
-          in: path
-          name: taskID
-          required: true
-          type: string
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: string
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: Task found
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.TaskStatusResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.TaskStatusResponse'
         "404":
           description: Task not found
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/github_com_sudo-Tiz_dns-tester-go_internal_models.ErrorResponse'
+            $ref: '#/definitions/github_com_sudo-tiz_dns-tester-go_internal_models.ErrorResponse'
       summary: Get task status and result
       tags:
-        - Tasks
+      - Tasks
 schemes:
-  - http
-  - https
+- http
+- https
 swagger: "2.0"
 tags:
-  - description: DNS lookup operations
-    name: DNS
-  - description: Task management and status retrieval
-    name: Tasks
-  - description: System health and metrics
-    name: System
+- description: DNS lookup operations
+  name: DNS
+- description: Task management and status retrieval
+  name: Tasks
+- description: System health and metrics
+  name: System

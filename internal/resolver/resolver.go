@@ -13,9 +13,9 @@ import (
 
 	"github.com/AdguardTeam/dnsproxy/upstream"
 	"github.com/miekg/dns"
-	"github.com/sudo-Tiz/dns-tester-go/internal/metrics"
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
-	"github.com/sudo-Tiz/dns-tester-go/internal/normalize"
+	"github.com/sudo-tiz/dns-tester-go/internal/metrics"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/normalize"
 )
 
 const (

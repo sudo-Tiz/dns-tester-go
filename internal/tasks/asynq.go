@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
 	"github.com/redis/go-redis/v9"
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
 )
 
 const (

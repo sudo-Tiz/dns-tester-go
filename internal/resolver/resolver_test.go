@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
 )
 
 func TestGetDNSProtocolFromTarget(t *testing.T) {

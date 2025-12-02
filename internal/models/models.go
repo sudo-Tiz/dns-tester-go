@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sudo-Tiz/dns-tester-go/internal/normalize"
+	"github.com/sudo-tiz/dns-tester-go/internal/normalize"
 )
 
 const (

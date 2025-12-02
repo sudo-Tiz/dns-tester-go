@@ -15,14 +15,14 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/sudo-Tiz/dns-tester-go/internal/config"
-	"github.com/sudo-Tiz/dns-tester-go/internal/metrics"
-	"github.com/sudo-Tiz/dns-tester-go/internal/models"
-	"github.com/sudo-Tiz/dns-tester-go/internal/normalize"
-	"github.com/sudo-Tiz/dns-tester-go/internal/tasks"
+	"github.com/sudo-tiz/dns-tester-go/internal/config"
+	"github.com/sudo-tiz/dns-tester-go/internal/metrics"
+	"github.com/sudo-tiz/dns-tester-go/internal/models"
+	"github.com/sudo-tiz/dns-tester-go/internal/normalize"
+	"github.com/sudo-tiz/dns-tester-go/internal/tasks"
 	httpSwagger "github.com/swaggo/http-swagger"
 
-	_ "github.com/sudo-Tiz/dns-tester-go/internal/api/docs" // swagger docs
+	_ "github.com/sudo-tiz/dns-tester-go/internal/api/docs" // swagger docs
 )
 
 // APIVersion is the current version of the API
