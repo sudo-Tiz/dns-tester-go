@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/sudo-Tiz/dns-tester-go?logo=github&sort=semver" alt="release"/>
-  <img src="https://img.shields.io/badge/Go-1.23-blue" alt="Go version"/>
+  <img src="https://img.shields.io/badge/Go-1.25-blue" alt="Go version"/>
   <img src="https://img.shields.io/docker/pulls/Sudo-Tiz/dnstestergo.svg" alt="docker"/>
   <img src="https://img.shields.io/github/actions/workflow/status/sudo-Tiz/dns-tester-go/build.yml?branch=main" alt="build"/>
   <img src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release" alt="semantic-release"/>
@@ -11,7 +11,7 @@
 
 High-performance DNS testing tool supporting UDP, TCP, DoT, DoH, and DoQ protocols.
 
-> ⚠️ **Beta Status**: This project is under active development. Bugs and breaking changes may occur. Documentation is made by AI and may contain errors. Contributions and feedback are highly encouraged!
+> ⚠️ **Beta Status**: This project is under active development. Bugs and breaking changes may occur. Contributions and feedback are highly encouraged!
 
 📖 **[Documentation](https://sudo-Tiz.github.io/dns-tester-go)** | 
 🚀 **[Quick Start](https://sudo-Tiz.github.io/dns-tester-go/docs/quickstart)** |
@@ -37,6 +37,8 @@ make docker-dev   # Start Docker stack
 ```
 
 For detailed installation, usage, configuration, and API documentation, see **[the documentation](https://sudo-Tiz.github.io/dns-tester-go)**.
+
+> 🤖 Documentation is partially generated using AI agents and may contain errors.
 
 ## 🤝 Contributing
 

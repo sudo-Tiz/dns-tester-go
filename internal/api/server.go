@@ -77,6 +77,9 @@ func NewServer(cfg *config.APIConfig) *Server {
 	s.router.Get("/metrics", s.handleMetrics)
 
 	// Swagger UI and OpenAPI endpoints
+	s.router.Get("/docs", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/docs/index.html", http.StatusMovedPermanently)
+	})
 	s.router.Get("/docs/*", httpSwagger.Handler(
 		httpSwagger.URL("/docs/doc.json"),
 		httpSwagger.DeepLinking(true),

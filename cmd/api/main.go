@@ -18,7 +18,7 @@ import (
 //
 // @contact.name DNS-Tester-GO
 // @contact.url https://github.com/sudo-Tiz/DNS-Tester-GO
-// @contact.email contact@example.com
+// @contact.email nocontact@example.com
 //
 // @license.name MIT
 // @license.url https://github.com/sudo-Tiz/DNS-Tester-GO/blob/main/LICENSE
