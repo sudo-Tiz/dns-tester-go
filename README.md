@@ -59,7 +59,7 @@ See [LICENSE](LICENSE) file for details.
 
 ## 🙏 Credits
 
-This project is a complete Go rewrite of **[dmachard's DNS-Tester](https://github.com/dmachard/DNS-Tester)**.
+This project is a complete Go rewrite of **[DNS-Tester](https://github.com/dmachard/DNS-Tester)**.
 
 Special thanks to [@dmachard](https://github.com/dmachard) for the original Python implementation and design inspiration.
 

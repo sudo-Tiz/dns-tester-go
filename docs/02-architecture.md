@@ -1,46 +1,43 @@
 # Architecture
 
-System architecture for dns-tester-go.
+High-level system design and data flow.
 
 ---
 
 ## 🏗️ System Overview
 
 ```
-Client → API Server → Task Queue → Worker Pool → DNS Servers
-  ↑                        ↓                         ↓
-  └──── GET /tasks/{id} ───┴──── Redis Storage ──────┘
+Client → API Server → Asynq (Redis) → Worker Pool → DNS Servers
+                         ↓                ↓
+                      Results ← ─ ─ ─ ─ ─ ┘
 ```
 
 ---
 
-## 📊 Component Diagram
+## 📊 Components
 
 ```mermaid
-graph TB
-    Client[Client CLI/API]
-    API[API Server<br/>chi + Tollbooth]
-    Redis[(Redis)]
-    Queue[Asynq Queue]
-    Worker1[Worker 1]
-    WorkerN[Worker N]
-    DNS[DNS Servers<br/>UDP/TCP/DoT/DoH/DoQ]
-    Prom[Prometheus]
+graph TD
+    Client([Client])
+    API[API Server<br/>Port 5000]
+    Redis[(Redis<br/>Task Queue)]
+    Worker[Workers<br/>1-N instances]
+    DNS[DNS Servers<br/>UDP/DoT/DoH/DoQ]
+    Metrics[metrics<br/>Prometheus]
     
     Client -->|POST /dns-lookup| API
-    API -->|Enqueue| Queue
-    Queue -->|Store| Redis
-    Queue -->|Dequeue| Worker1
-    Queue -->|Dequeue| WorkerN
-    Worker1 -->|Query| DNS
-    WorkerN -->|Query| DNS
-    Worker1 -->|Store Result| Redis
-    WorkerN -->|Store Result| Redis
-    Client -->|GET /tasks| API
-    API -->|Fetch| Redis
-    API -->|Expose /metrics| Prom
-    Worker1 -.->|Metrics| Prom
-    WorkerN -.->|Metrics| Prom
+    API -->|Enqueue task| Redis
+    Redis -->|Pull task| Worker
+    Worker -->|DNS query| DNS
+    DNS -->|Response| Worker
+    Worker -->|Store result| Redis
+    Client -->|GET /tasks/id| API
+    API -->|Fetch result| Redis
+    API -.->|Expose| Metrics
+    Worker -.->|Expose| Metrics
+    
+    style Redis fill:#f96,stroke:#333,stroke-width:2px
+    style DNS fill:#9cf,stroke:#333,stroke-width:2px
 ```
 
 ---

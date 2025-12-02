@@ -14,28 +14,27 @@ const FeatureList: FeatureItem[] = [
     icon: '🔐',
     description: (
       <>
-        Test all modern DNS protocols in one tool: <strong>Do53</strong> (UDP/TCP),
+        Test DNS protocols: <strong>Do53</strong> (UDP/TCP),
         <strong> DoT</strong>, <strong>DoH</strong>, and <strong>DoQ</strong>.
       </>
     ),
   },
   {
-    title: 'High Performance',
+    title: 'Built with Go',
     icon: '⚡',
     description: (
       <>
-        Built with <strong>Go</strong> for speed. Query multiple DNS servers
-        concurrently with minimal latency.
+        Query multiple DNS servers concurrently.
       </>
     ),
   },
   {
-    title: 'Production Ready',
-    icon: '📊',
+    title: 'Beta Software',
+    icon: '🧪',
     description: (
       <>
-        Built-in <strong>Prometheus</strong> metrics, rate limiting, and
-        async task processing with Redis.
+        Under active development. <strong>Prometheus</strong> metrics,
+        rate limiting, and async processing with Redis.
       </>
     ),
   },
@@ -45,7 +44,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Use the <strong>CLI</strong> for quick tests or the <strong>REST API</strong>
-        for integration and automation.
+        for automation.
       </>
     ),
   },
@@ -54,18 +53,18 @@ const FeatureList: FeatureItem[] = [
     icon: '🐳',
     description: (
       <>
-        Deploy with <strong>Docker Compose</strong> in seconds.
-        Horizontal scaling with worker pools.
+        Deploy with <strong>Docker Compose</strong>.
+        Scale with worker pools.
       </>
     ),
   },
   {
-    title: 'Rate Limiting',
-    icon: '🛡️',
+    title: 'AI-Assisted Docs',
+    icon: '🤖',
     description: (
       <>
-        Protect your infrastructure with configurable <strong>per-IP
-        rate limiting</strong> and burst control.
+        Documentation generated with help from <strong>AI agents</strong>.
+        Report issues if you find errors.
       </>
     ),
   },

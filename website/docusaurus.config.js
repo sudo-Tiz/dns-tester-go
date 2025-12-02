@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'DNS Tester GO',
-  tagline: 'High-performance DNS testing and monitoring tool',
+  tagline: 'DNS testing tool (beta)',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

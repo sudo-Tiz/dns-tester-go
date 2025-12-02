@@ -13,11 +13,7 @@ const sidebars = {
     'configuration',
     'architecture',
     'monitoring',
-    {
-      type: 'category',
-      label: 'Reference',
-      items: ['troubleshooting', 'examples'],
-    },
+    'troubleshooting',
     'contributing',
     'todo',
   ],
