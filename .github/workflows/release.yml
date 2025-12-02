@@ -19,8 +19,6 @@ jobs:
         with:
           go-version: '1.25.x'
           cache: true
-      - name: Generate Swagger docs
-        run: make swagger
       - name: Install dependencies
         run: go mod download
       - name: Run go vet
@@ -120,6 +118,26 @@ jobs:
             -o dist/dnstestergo-worker-darwin-arm64 ./cmd/worker
           GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
             -o dist/dnstestergo-query-darwin-arm64 ./cmd/query
+
+          # Windows AMD64
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-windows-amd64.exe ./cmd/dnstestergo
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-server-windows-amd64.exe ./cmd/api
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-worker-windows-amd64.exe ./cmd/worker
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-query-windows-amd64.exe ./cmd/query
+
+          # Windows ARM64
+          GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-windows-arm64.exe ./cmd/dnstestergo
+          GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-server-windows-arm64.exe ./cmd/api
+          GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-worker-windows-arm64.exe ./cmd/worker
+          GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="$LDFLAGS" \
+            -o dist/dnstestergo-query-windows-arm64.exe ./cmd/query
       - name: Login to GitHub Container Registry
         if: steps.get_version.outputs.has_version == 'true'
         uses: docker/login-action@v3
