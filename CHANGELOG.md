@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/sudo-Tiz/dns-tester-go/compare/v1.0.1...v1.0.2) (2025-12-02)
+
+
+### ♻️ Refactoring
+
+* normalize project name to lowercase dns-tester-go ([42df3f6](https://github.com/sudo-Tiz/dns-tester-go/commit/42df3f6a28422f21fd02ed58df2b50d28e503b18))
+
 ## [1.0.1](https://github.com/sudo-Tiz/DNS-Tester-GO/compare/v1.0.0...v1.0.1) (2025-12-02)
 
 
