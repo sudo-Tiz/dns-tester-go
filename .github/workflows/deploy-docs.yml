@@ -41,6 +41,8 @@ jobs:
         run: npm ci
       - name: Build website
         working-directory: ./website
+        env:
+          NODE_ENV: production
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
