@@ -15,8 +15,15 @@ COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
+# Install swag for Swagger generation
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go install github.com/swaggo/swag/cmd/swag@latest
+
 # Copy source code
 COPY . .
+
+# Generate Swagger documentation
+RUN swag init -g cmd/api/main.go -o internal/api/docs --parseDependency --parseInternal
 
 # Build all binaries with optimizations
 RUN --mount=type=cache,target=/go/pkg/mod \

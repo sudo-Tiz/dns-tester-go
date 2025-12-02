@@ -8,15 +8,18 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: '\.md$'
+        exclude: '\.md$|internal/api/docs/swagger\.(yaml|json)$|docs/openapi\.yaml$'
       - id: end-of-file-fixer
+        exclude: 'internal/api/docs/swagger\.(yaml|json)$|docs/openapi\.yaml$'
       - id: check-yaml
         args: ['--unsafe'] # Allow custom tags in docker-compose
+        exclude: 'internal/api/docs/swagger\.yaml$|docs/openapi\.yaml$'
       - id: check-added-large-files
         args: ['--maxkb=1000']
       - id: check-merge-conflict
       - id: check-case-conflict
       - id: mixed-line-ending
+        exclude: 'internal/api/docs/swagger\.(yaml|json)$'
       - id: detect-private-key
   # Go formatting
   - repo: https://github.com/dnephin/pre-commit-golang
