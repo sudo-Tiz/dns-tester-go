@@ -16,6 +16,4 @@ jobs:
         with:
           go-version: '1.25.x'
           cache: true
-      - name: Generate Swagger docs (for validation)
-        run: make swagger
       - uses: j178/prek-action@v1

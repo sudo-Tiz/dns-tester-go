@@ -17,8 +17,6 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: true
-      - name: Generate Swagger docs
-        run: make swagger
       - name: Install dependencies
         run: go mod download
       - name: Run go vet
