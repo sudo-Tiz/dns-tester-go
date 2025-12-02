@@ -17,12 +17,10 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: true
-      - name: Install dependencies
-        run: |
-          go mod download
-          go mod tidy
       - name: Generate Swagger docs
         run: make swagger
+      - name: Install dependencies
+        run: go mod download
       - name: Run go vet
         run: go vet ./...
       - name: Run unit tests
