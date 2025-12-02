@@ -1,8 +1,5 @@
 name: Testing
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -47,6 +44,8 @@ jobs:
         with:
           go-version: "1.25.x"
           cache: true
+      - name: Create config.yaml for Docker
+        run: cp conf/config.example.yaml conf/config.yaml
       - name: Start Docker services
         run: |
           echo "Starting production Docker stack..."
