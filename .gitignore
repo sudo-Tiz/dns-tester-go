@@ -24,9 +24,6 @@ conf/config.yaml
 *.swo
 *~
 
-# Swagger (keep YAML/JSON, ignore generated Go code)
-internal/api/docs/docs.go
-
 # OS
 .DS_Store
 Thumbs.db
