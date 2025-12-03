@@ -6,12 +6,12 @@ Choose your installation method.
 
 ## 📦 Installation Methods
 
-| Method | Use Case | Command |
-|--------|----------|---------|
-| **Docker** | Production, testing | `docker compose --profile prod up -d` |
-| **Go Install** | CLI or Development | `go install github.com/sudo-Tiz/dns-tester-go/cmd/dnstestergo@latest` |
-| **Binary** | No Go/Docker | [Download from Releases](https://github.com/sudo-Tiz/dns-tester-go/releases) |
-| **Source** | Development | `make build` |
+| Method | Command |
+|--------|---------|
+| **Docker** | `docker compose --profile prod up -d` |
+| **Go Install** | `go install github.com/sudo-Tiz/dns-tester-go/cmd/dnstestergo@latest` |
+| **Binary** | [Download from Releases](https://github.com/sudo-Tiz/dns-tester-go/releases) |
+| **Source** | `make build` |
 
 ---
 
@@ -48,7 +48,36 @@ cd dns-tester-go
 make build
 ```
 
-**Binaries**: `bin/dnstestergo-query`, `bin/dnstestergo-server`, `bin/dnstestergo-worker`
+**Binaries**: `bin/dnstestergo`, `bin/dnstestergo-query`, `bin/dnstestergo-server`, `bin/dnstestergo-worker`
+
+---
+
+## 📥 Download Pre-built Binaries
+
+[View all releases](https://github.com/sudo-Tiz/dns-tester-go/releases)
+
+**Quick Install:**
+```bash
+# Set your platform (linux/darwin/windows) and arch (amd64/arm64)
+VERSION=v1.0.0  # Replace with latest version
+OS=linux        # or darwin (macOS), windows
+ARCH=amd64      # or arm64
+
+# Download and install
+curl -L "https://github.com/sudo-Tiz/dns-tester-go/releases/download/${VERSION}/dnstestergo-${OS}-${ARCH}" -o dnstestergo && \
+chmod +x dnstestergo && \
+sudo mv dnstestergo /usr/local/bin/
+```
+
+**Available binaries:**
+- `dnstestergo-{os}-{arch}` - All-in-one (recommended)
+- `dnstestergo-server-{os}-{arch}` - API server only
+- `dnstestergo-worker-{os}-{arch}` - Worker only
+- `dnstestergo-query-{os}-{arch}` - CLI query tool
+
+**Supported:** `linux/darwin/windows` × `amd64/arm64`
+
+**Windows:** Download `.exe` from releases and add to PATH.
 
 ---
 

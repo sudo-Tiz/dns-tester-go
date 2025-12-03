@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'website/**'
+      - 'docs/**'
+      - '*.md'
+      - 'LICENSE'
 permissions:
   contents: write
   packages: write
