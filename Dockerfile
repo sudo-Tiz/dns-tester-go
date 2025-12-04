@@ -1,9 +1,9 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.20
 
 # ============================================================================
 # Stage 1: Builder - Compile all Go binaries
 # ============================================================================
-FROM golang:1.25.4-alpine AS builder
+FROM golang:1.25.5-alpine AS builder
 
 WORKDIR /build
 
@@ -48,7 +48,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 # ============================================================================
 # Stage 2: Dev - Development environment for testing
 # ============================================================================
-FROM golang:1.25.4-alpine AS dev
+FROM golang:1.25.5-alpine AS dev
 
 WORKDIR /app
 
@@ -67,7 +67,7 @@ CMD ["go", "run", "./cmd/api", "server", "--host", "0.0.0.0"]
 # ============================================================================
 # Stage 3: Server - API server runtime
 # ============================================================================
-FROM alpine:3.19 AS server
+FROM alpine:3.23 AS server
 
 WORKDIR /app
 
@@ -96,7 +96,7 @@ CMD ["--config", "/app/conf/config.yaml"]
 # ============================================================================
 # Stage 4: Worker - Async task processor
 # ============================================================================
-FROM alpine:3.19 AS worker
+FROM alpine:3.23 AS worker
 
 WORKDIR /app
 
@@ -121,7 +121,7 @@ CMD ["--config", "/app/conf/config.yaml"]
 # ============================================================================
 # Stage 5: Query - CLI tool for DNS queries
 # ============================================================================
-FROM alpine:3.19 AS query
+FROM alpine:3.23 AS query
 
 WORKDIR /app
 
@@ -145,7 +145,7 @@ CMD ["--help"]
 # ============================================================================
 # Stage 6: All - All-in-one image
 # ============================================================================
-FROM alpine:3.19 AS all
+FROM alpine:3.23 AS all
 
 WORKDIR /app
 
