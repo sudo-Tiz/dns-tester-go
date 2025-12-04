@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
-	"time"
 
 	"github.com/sudo-tiz/dns-tester-go/internal/api"
 	"github.com/sudo-tiz/dns-tester-go/internal/config"
@@ -33,7 +32,7 @@ func NewAPIApp(cfg *config.APIConfig, redisURL string) (*APIApp, error) {
 		if u, err := url.Parse(redisURL); err == nil {
 			redisAddr = u.Host
 		}
-		client = tasks.NewClient(redisAddr, 24*time.Hour)
+		client = tasks.NewClient(redisAddr)
 	}
 	a.tasksClient = client
 

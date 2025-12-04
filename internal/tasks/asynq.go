@@ -1,5 +1,4 @@
 // Package tasks provides async DNS lookup queue using Asynq/Redis or in-memory fallback.
-// Delegates task queue to Asynq, caches results in Redis for 24h TTL.
 package tasks
 
 import (
@@ -7,11 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
-	"github.com/redis/go-redis/v9"
 	"github.com/sudo-tiz/dns-tester-go/internal/models"
 )
 
@@ -20,12 +19,10 @@ const (
 	TaskTypeDNSLookup = "dns:lookup"
 )
 
-// Client wraps Asynq for task enqueueing and Redis for result caching.
+// Client wraps Asynq for task enqueueing and result retrieval.
 type Client struct {
 	asynqClient *asynq.Client
 	inspector   *asynq.Inspector
-	redisClient *redis.Client
-	resultTTL   time.Duration
 }
 
 // ClientInterface allows swapping between Asynq and memory implementations.
@@ -36,15 +33,12 @@ type ClientInterface interface {
 }
 
 // NewClient creates Asynq client with Redis result backend.
-func NewClient(redisAddr string, resultTTL time.Duration) *Client {
+func NewClient(redisAddr string) *Client {
 	redisOpts := asynq.RedisClientOpt{Addr: redisAddr}
-	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
 
 	return &Client{
 		asynqClient: asynq.NewClient(redisOpts),
 		inspector:   asynq.NewInspector(redisOpts),
-		redisClient: rdb,
-		resultTTL:   resultTTL,
 	}
 }
 
@@ -70,6 +64,7 @@ func (c *Client) EnqueueDNSLookup(ctx context.Context, domain, qtype string, ser
 	opts := []asynq.Option{
 		asynq.TaskID(id),
 		asynq.MaxRetry(3),
+		asynq.Retention(24 * time.Hour),
 	}
 
 	if _, err := c.asynqClient.EnqueueContext(ctx, task, opts...); err != nil {
@@ -85,10 +80,6 @@ func (c *Client) Close() error {
 
 	if err := c.inspector.Close(); err != nil {
 		errs = append(errs, fmt.Errorf("inspector: %w", err))
-	}
-
-	if err := c.redisClient.Close(); err != nil {
-		errs = append(errs, fmt.Errorf("redis: %w", err))
 	}
 
 	if err := c.asynqClient.Close(); err != nil {
@@ -108,28 +99,11 @@ func (c *Client) HasActiveWorkers(_ context.Context) bool {
 	return len(servers) > 0
 }
 
-// GetTaskStatus checks Redis cache first, falls back to Asynq inspector.
-// Pragmatic approach: cache completed results, poll Asynq for pending/active.
-func (c *Client) GetTaskStatus(ctx context.Context, taskID string) (*models.TaskStatusResponse, error) {
-	resultKey := fmt.Sprintf("dnstester:result:%s", taskID)
-	resultJSON, err := c.redisClient.Get(ctx, resultKey).Result()
-
-	if err == nil {
-		// Result cached - task completed
-		var res models.DNSLookupResults
-		if json.Unmarshal([]byte(resultJSON), &res) == nil {
-			return &models.TaskStatusResponse{
-				TaskID: taskID,
-				Status: "SUCCESS",
-				Result: &res,
-			}, nil
-		}
-	}
-
-	// Not cached - check Asynq queue
+// GetTaskStatus retrieves task status and result from Asynq.
+func (c *Client) GetTaskStatus(_ context.Context, taskID string) (*models.TaskStatusResponse, error) {
 	taskInfo, err := c.inspector.GetTaskInfo("default", taskID)
 	if err != nil {
-		return nil, fmt.Errorf("not found")
+		return nil, fmt.Errorf("task not found: %w", err)
 	}
 
 	response := &models.TaskStatusResponse{
@@ -139,6 +113,17 @@ func (c *Client) GetTaskStatus(ctx context.Context, taskID string) (*models.Task
 	}
 
 	switch taskInfo.State {
+	case asynq.TaskStateCompleted:
+		response.Status = "SUCCESS"
+		if len(taskInfo.Result) > 0 {
+			var res models.DNSLookupResults
+			if err := json.Unmarshal(taskInfo.Result, &res); err == nil {
+				response.Result = &res
+			} else {
+				slog.Warn("Failed to unmarshal task result", "task_id", taskID, "error", err)
+			}
+		}
+
 	case asynq.TaskStateActive:
 		response.Status = "ACTIVE"
 	case asynq.TaskStateRetry:

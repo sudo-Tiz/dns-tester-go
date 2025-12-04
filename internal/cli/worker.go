@@ -14,7 +14,6 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/redis/go-redis/v9"
 	"github.com/spf13/cobra"
 	"github.com/sudo-tiz/dns-tester-go/internal/config"
 	"github.com/sudo-tiz/dns-tester-go/internal/models"
@@ -131,16 +130,6 @@ func runWorker(cmd *cobra.Command, configPath, redisURL string, concurrency, met
 		slog.Info("Worker metrics disabled (use --enable-metrics to enable)")
 	}
 
-	// Create Redis client for storing results
-	rdb := redis.NewClient(&redis.Options{
-		Addr: redisAddr,
-	})
-	defer func() {
-		if err := rdb.Close(); err != nil {
-			slog.Error("Failed to close Redis connection", "error", err)
-		}
-	}()
-
 	// Get DNS timeout from config
 	dnsTimeoutDuration := time.Duration(cfg.GetDNSTimeout()) * time.Second
 	slog.Info("DNS query timeout configured", "timeout", dnsTimeoutDuration)
@@ -148,7 +137,7 @@ func runWorker(cmd *cobra.Command, configPath, redisURL string, concurrency, met
 	// Register handler with config closure
 	mux := asynq.NewServeMux()
 	mux.HandleFunc(tasks.TaskTypeDNSLookup, func(ctx context.Context, t *asynq.Task) error {
-		return handleTaskWithRedis(ctx, t, rdb, dnsTimeoutDuration, cfg)
+		return handleTask(ctx, t, dnsTimeoutDuration, cfg)
 	})
 
 	srv := asynq.NewServer(
@@ -174,8 +163,9 @@ func runWorker(cmd *cobra.Command, configPath, redisURL string, concurrency, met
 	return nil
 }
 
-// handleTaskWithRedis processes a task and stores result in Redis
-func handleTaskWithRedis(ctx context.Context, t *asynq.Task, rdb *redis.Client, dnsTimeout time.Duration, cfg *config.APIConfig) error {
+// handleTask processes a task and stores result using Asynq's native ResultWriter
+// This eliminates the need for custom Redis storage and prevents race conditions
+func handleTask(_ context.Context, t *asynq.Task, dnsTimeout time.Duration, cfg *config.APIConfig) error {
 	var p map[string]interface{}
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return err
@@ -185,7 +175,6 @@ func handleTaskWithRedis(ctx context.Context, t *asynq.Task, rdb *redis.Client, 
 	domain, _ := p["domain"].(string)
 	qtype, _ := p["qtype"].(string)
 
-	// decode servers
 	var servers []models.DNSServer
 	if s, ok := p["servers"]; ok {
 		b, _ := json.Marshal(s)
@@ -194,12 +183,8 @@ func handleTaskWithRedis(ctx context.Context, t *asynq.Task, rdb *redis.Client, 
 
 	tlsInsecure, _ := p["tls_insecure"].(bool)
 
-	// Use background context for DNS queries to avoid premature cancellation
-	// The worker task itself is managed by Asynq
-	queryCtx := context.Background()
-
 	start := time.Now()
-	results := resolver.RunQueries(queryCtx, domain, qtype, servers, tlsInsecure, dnsTimeout, cfg.GetMaxConcurrentQueries(), cfg.GetMaxRetries())
+	results := resolver.RunQueries(context.Background(), domain, qtype, servers, tlsInsecure, dnsTimeout, cfg.GetMaxConcurrentQueries(), cfg.GetMaxRetries())
 	duration := time.Since(start).Seconds()
 
 	res := map[string]interface{}{
@@ -207,17 +192,15 @@ func handleTaskWithRedis(ctx context.Context, t *asynq.Task, rdb *redis.Client, 
 		"duration": duration,
 	}
 
-	// Store result in Redis cache with 1 hour TTL
 	resultData, err := json.Marshal(res)
 	if err != nil {
 		slog.Error("Failed to marshal result", "task_id", taskID, "error", err)
 		return err
 	}
 
-	resultKey := fmt.Sprintf("dnstester:result:%s", taskID)
-	if err := rdb.Set(ctx, resultKey, resultData, 1*time.Hour).Err(); err != nil {
-		slog.Error("Failed to store result in Redis", "task_id", taskID, "error", err)
-		return err
+	if _, err := t.ResultWriter().Write(resultData); err != nil {
+		slog.Error("Failed to write result", "task_id", taskID, "error", err)
+		return fmt.Errorf("failed to write result: %w", err)
 	}
 
 	slog.Info("Task completed", "task_id", taskID, "duration_seconds", fmt.Sprintf("%.3f", duration))
