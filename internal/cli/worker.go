@@ -14,6 +14,7 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/cobra"
 	"github.com/sudo-tiz/dns-tester-go/internal/config"
 	"github.com/sudo-tiz/dns-tester-go/internal/models"
@@ -138,10 +139,17 @@ func runWorker(cmd *cobra.Command, configPath, redisURL string, concurrency, met
 	dnsTimeoutDuration := time.Duration(cfg.GetDNSTimeout()) * time.Second
 	slog.Info("DNS query timeout configured", "timeout", dnsTimeoutDuration)
 
+	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
+	defer func() {
+		if err := rdb.Close(); err != nil {
+			slog.Error("Failed to close Redis connection", "error", err)
+		}
+	}()
+
 	// Register handler with config closure
 	mux := asynq.NewServeMux()
 	mux.HandleFunc(tasks.TaskTypeDNSLookup, func(ctx context.Context, t *asynq.Task) error {
-		return handleTask(ctx, t, dnsTimeoutDuration, cfg)
+		return handleTask(ctx, t, rdb, dnsTimeoutDuration, cfg)
 	})
 
 	srv := asynq.NewServer(
@@ -167,9 +175,8 @@ func runWorker(cmd *cobra.Command, configPath, redisURL string, concurrency, met
 	return nil
 }
 
-// handleTask processes a task and stores result using Asynq's native ResultWriter
-// This eliminates the need for custom Redis storage and prevents race conditions
-func handleTask(_ context.Context, t *asynq.Task, dnsTimeout time.Duration, cfg *config.APIConfig) error {
+// handleTask processes DNS lookup and stores result in Redis cache
+func handleTask(ctx context.Context, t *asynq.Task, rdb *redis.Client, dnsTimeout time.Duration, cfg *config.APIConfig) error {
 	var p map[string]interface{}
 	if err := json.Unmarshal(t.Payload(), &p); err != nil {
 		return err
@@ -191,20 +198,28 @@ func handleTask(_ context.Context, t *asynq.Task, dnsTimeout time.Duration, cfg 
 	results := resolver.RunQueries(context.Background(), domain, qtype, servers, tlsInsecure, dnsTimeout, cfg.GetMaxConcurrentQueries(), cfg.GetMaxRetries())
 	duration := time.Since(start).Seconds()
 
-	res := map[string]interface{}{
-		"details":  results,
-		"duration": duration,
+	// Build task metadata (Celery-style structure)
+	taskMeta := map[string]interface{}{
+		"status":  "SUCCESS",
+		"task_id": taskID,
+		"result": map[string]interface{}{
+			"details":  results,
+			"duration": duration,
+		},
+		"completed_at": time.Now().UTC(),
 	}
 
-	resultData, err := json.Marshal(res)
+	metaData, err := json.Marshal(taskMeta)
 	if err != nil {
-		slog.Error("Failed to marshal result", "task_id", taskID, "error", err)
+		slog.Error("Failed to marshal task metadata", "task_id", taskID, "error", err)
 		return err
 	}
 
-	if _, err := t.ResultWriter().Write(resultData); err != nil {
-		slog.Error("Failed to write result", "task_id", taskID, "error", err)
-		return fmt.Errorf("failed to write result: %w", err)
+	// Write to Redis cache (single key, fast reads)
+	resultKey := fmt.Sprintf("dnstester:task-meta:%s", taskID)
+	if err := rdb.Set(ctx, resultKey, metaData, 24*time.Hour).Err(); err != nil {
+		slog.Error("Failed to cache result", "task_id", taskID, "error", err)
+		return fmt.Errorf("failed to cache result: %w", err)
 	}
 
 	slog.Info("Task completed", "task_id", taskID, "duration_seconds", fmt.Sprintf("%.3f", duration))

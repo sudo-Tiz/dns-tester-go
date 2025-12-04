@@ -6,11 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log/slog"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
+	"github.com/redis/go-redis/v9"
 	"github.com/sudo-tiz/dns-tester-go/internal/models"
 )
 
@@ -23,6 +23,8 @@ const (
 type Client struct {
 	asynqClient *asynq.Client
 	inspector   *asynq.Inspector
+	redisClient *redis.Client
+	resultTTL   time.Duration
 }
 
 // ClientInterface allows swapping between Asynq and memory implementations.
@@ -35,10 +37,13 @@ type ClientInterface interface {
 // NewClient creates Asynq client with Redis result backend.
 func NewClient(redisAddr string) *Client {
 	redisOpts := asynq.RedisClientOpt{Addr: redisAddr}
+	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
 
 	return &Client{
 		asynqClient: asynq.NewClient(redisOpts),
 		inspector:   asynq.NewInspector(redisOpts),
+		redisClient: rdb,
+		resultTTL:   24 * time.Hour,
 	}
 }
 
@@ -64,7 +69,7 @@ func (c *Client) EnqueueDNSLookup(ctx context.Context, domain, qtype string, ser
 	opts := []asynq.Option{
 		asynq.TaskID(id),
 		asynq.MaxRetry(3),
-		asynq.Retention(24 * time.Hour),
+		asynq.Retention(0),
 	}
 
 	if _, err := c.asynqClient.EnqueueContext(ctx, task, opts...); err != nil {
@@ -80,6 +85,10 @@ func (c *Client) Close() error {
 
 	if err := c.inspector.Close(); err != nil {
 		errs = append(errs, fmt.Errorf("inspector: %w", err))
+	}
+
+	if err := c.redisClient.Close(); err != nil {
+		errs = append(errs, fmt.Errorf("redis: %w", err))
 	}
 
 	if err := c.asynqClient.Close(); err != nil {
@@ -99,8 +108,32 @@ func (c *Client) HasActiveWorkers(_ context.Context) bool {
 	return len(servers) > 0
 }
 
-// GetTaskStatus retrieves task status and result from Asynq.
-func (c *Client) GetTaskStatus(_ context.Context, taskID string) (*models.TaskStatusResponse, error) {
+// GetTaskStatus retrieves task status from Redis cache or Asynq inspector.
+// Uses simple Redis key (like Celery) for fast reads with 1 GET operation.
+func (c *Client) GetTaskStatus(ctx context.Context, taskID string) (*models.TaskStatusResponse, error) {
+	// Fast path: Check Redis cache first (Celery-style single key)
+	resultKey := fmt.Sprintf("dnstester:task-meta:%s", taskID)
+	data, err := c.redisClient.Get(ctx, resultKey).Result()
+
+	if err == nil {
+		var taskMeta struct {
+			Status      string                   `json:"status"`
+			Result      *models.DNSLookupResults `json:"result"`
+			TaskID      string                   `json:"task_id"`
+			CompletedAt time.Time                `json:"completed_at"`
+		}
+
+		if json.Unmarshal([]byte(data), &taskMeta) == nil && taskMeta.Status == "SUCCESS" {
+			return &models.TaskStatusResponse{
+				TaskID:      taskID,
+				Status:      "SUCCESS",
+				Result:      taskMeta.Result,
+				CompletedAt: taskMeta.CompletedAt,
+			}, nil
+		}
+	}
+
+	// Slow path: Task not completed yet, check Asynq for status
 	taskInfo, err := c.inspector.GetTaskInfo("default", taskID)
 	if err != nil {
 		return nil, fmt.Errorf("task not found: %w", err)
@@ -115,12 +148,11 @@ func (c *Client) GetTaskStatus(_ context.Context, taskID string) (*models.TaskSt
 	switch taskInfo.State {
 	case asynq.TaskStateCompleted:
 		response.Status = "SUCCESS"
+		// Task just completed but cache not written yet, fallback to Asynq result
 		if len(taskInfo.Result) > 0 {
 			var res models.DNSLookupResults
 			if err := json.Unmarshal(taskInfo.Result, &res); err == nil {
 				response.Result = &res
-			} else {
-				slog.Warn("Failed to unmarshal task result", "task_id", taskID, "error", err)
 			}
 		}
 
