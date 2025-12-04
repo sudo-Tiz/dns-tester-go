@@ -131,3 +131,8 @@ services:
     entrypoint: ["dnstestergo-query"]
     networks:
       - dns-tester
+networks:
+  dns-tester:
+    driver: bridge
+volumes:
+  redis-data:

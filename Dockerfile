@@ -78,7 +78,7 @@ RUN apk --no-cache add ca-certificates tzdata wget && \
 
 # Copy binary and config
 COPY --from=builder /build/bin/dnstestergo-server /usr/local/bin/
-COPY --from=builder /build/conf/config.example.yaml /app/conf/config.yaml
+COPY --from=builder /build/conf/config.yaml /app/conf/config.yaml
 
 # Set ownership
 RUN chown -R dnstestergo:dnstestergo /app
@@ -107,7 +107,7 @@ RUN apk --no-cache add ca-certificates tzdata && \
 
 # Copy binary and config
 COPY --from=builder /build/bin/dnstestergo-worker /usr/local/bin/
-COPY --from=builder /build/conf/config.example.yaml /app/conf/config.yaml
+COPY --from=builder /build/conf/config.yaml /app/conf/config.yaml
 
 # Set ownership
 RUN chown -R dnstestergo:dnstestergo /app
@@ -132,7 +132,7 @@ RUN apk --no-cache add ca-certificates tzdata && \
 
 # Copy binaries
 COPY --from=builder /build/bin/dnstestergo-query /usr/local/bin/
-COPY --from=builder /build/conf/config.example.yaml /app/conf/config.yaml
+COPY --from=builder /build/conf/config.yaml /app/conf/config.yaml
 
 # Set ownership
 RUN chown -R dnstestergo:dnstestergo /app
@@ -156,7 +156,7 @@ RUN apk --no-cache add ca-certificates tzdata wget && \
 
 # Copy ALL binaries
 COPY --from=builder /build/bin/dnstestergo /usr/local/bin/
-COPY --from=builder /build/conf/config.example.yaml /app/conf/config.yaml
+COPY --from=builder /build/conf/config.yaml /app/conf/config.yaml
 
 # Set ownership
 RUN chown -R dnstestergo:dnstestergo /app
