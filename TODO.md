@@ -2,6 +2,9 @@
 
 ## 🎯 High Priority
 
+ - [ ] **FIX Worker Redis Implementation** 🛠️
+   - Redo the worker implementation with Redis (current code is not optimized at all)
+
 - [ ] **Performance Benchmarks** 📊
   - Comprehensive benchmark suite (protocols, concurrency, throughput)
   - Comparison with Python implementation

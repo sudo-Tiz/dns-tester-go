@@ -4,7 +4,7 @@
   <img src="https://img.shields.io/github/v/release/sudo-Tiz/dns-tester-go?logo=github&sort=semver" alt="release"/>
   <img src="https://img.shields.io/badge/Go-1.25-blue" alt="Go version"/>
   <img src="https://img.shields.io/docker/pulls/Sudo-Tiz/dnstestergo.svg" alt="docker"/>
-  <img src="https://img.shields.io/github/actions/workflow/status/sudo-Tiz/dns-tester-go/build.yml?branch=main" alt="build"/>
+  <img src="https://img.shields.io/github/actions/workflow/status/sudo-Tiz/dns-tester-go/release.yml?branch=main" alt="release"/>
   <img src="https://img.shields.io/badge/semantic--release-conventional-e10079?logo=semantic-release" alt="semantic-release"/>
   <img src="https://img.shields.io/badge/status-beta-yellow" alt="beta"/>
 </p>

@@ -8,6 +8,8 @@ on:
       - 'docs/**'
       - '*.md'
       - 'LICENSE'
+      - '.github/**'
+      - 'Makefile'
 permissions:
   contents: write
   packages: write
